@@ -8,7 +8,6 @@ import java.util.concurrent.Future;
 
 /*
  * 
- * W
  * @author Ðì±ø
  */
 

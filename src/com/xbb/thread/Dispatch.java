@@ -43,7 +43,6 @@ public class Dispatch {
 		}
 	}
 	
-	
 	public static class MyRunnable implements Runnable
 	{
 		Dispatch dis;
@@ -65,9 +64,7 @@ public class Dispatch {
 			synchronized(dis){dis.notifyAll();}
 			System.out.println(Thread.currentThread().getName()+" 唤醒其他线程");
 			}
-		
 	}
-	
 	
 	public static class MyThread extends Thread
 	{

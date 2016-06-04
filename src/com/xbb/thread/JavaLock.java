@@ -15,8 +15,8 @@ public class JavaLock {
 		Share share=new Share();
 		for(int i = 0;i<10;i++)
 		{
-		Thread t1=new Thread(new MyRunnable(share),"t1");
-		t1.start();
+			Thread t1=new Thread(new MyRunnable(share),"t1");
+			t1.start();
 		}
 	}	
 	public static class Share
@@ -34,7 +34,6 @@ public class JavaLock {
 			try {
 				Thread.sleep(1);// do something
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			num=num2;
@@ -55,8 +54,6 @@ public class JavaLock {
 		}
 	}
 	
-	
-	
 	public static class ShareLock
 	{
 		private int num=100;
@@ -76,9 +73,8 @@ public class JavaLock {
 			int num2=num;
 			num2-=10;
 			try {
-				Thread.sleep(1);// do something
+				Thread.sleep(100);// do something
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			num=num2;

@@ -20,12 +20,22 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class ProblemReaderWriter{
 
+	public static enum Mode
+	{
+		READFIRST,
+		WRITEFRIST,
+		NORMAL;
+	}
+	
+	
 	public static void main(String[] args)
 	{
 		Semaphore readerNum = new Semaphore(0);//信号量：读者总数
 		Semaphore writerNum = new Semaphore(1);//信号量：写着总数
 		Semaphore mutexReader = new Semaphore(1);//读者互斥锁
 		Semaphore mutexWriter = new Semaphore(1);//写者互斥锁
+		
+		Mode mode = Mode.READFIRST; //模式选择
 		
 		Lock lock = new ReentrantLock();
 		
@@ -35,30 +45,30 @@ public class ProblemReaderWriter{
 		//3种模式如果同时运行，因存在同步问题，会有意想不到的结果
 		//最好还是分开运行
 
-		System.out.println("读优先:");
+		switch(mode)
 		{
-			pool.execute(new Reader1(readerNum,writerNum,lock));
-			pool.execute(new Writer1(readerNum,writerNum,lock));
-			pool.execute(new Reader1(readerNum,writerNum,lock));
-			pool.execute(new Reader1(readerNum,writerNum,lock));
+			case READFIRST:
+				System.out.println("读优先:");
+				pool.execute(new Reader1(readerNum,writerNum,lock));
+				pool.execute(new Writer1(readerNum,writerNum,lock));
+				pool.execute(new Reader1(readerNum,writerNum,lock));
+				pool.execute(new Reader1(readerNum,writerNum,lock));
+				break;
+			case NORMAL:
+				System.out.println("顺序操作:");
+				pool.execute(new Reader2(readerNum,writerNum,mutexReader));
+				pool.execute(new Writer2(readerNum,writerNum,mutexReader));
+				pool.execute(new Reader2(readerNum,writerNum,mutexReader));
+				pool.execute(new Reader2(readerNum,writerNum,mutexReader));
+				break;
+			case WRITEFRIST:	
+				System.out.println("写优先:");
+				pool.execute(new Reader3(readerNum,writerNum,mutexReader,mutexWriter));
+				pool.execute(new Reader3(readerNum,writerNum,mutexReader,mutexWriter));
+				pool.execute(new Reader3(readerNum,writerNum,mutexReader,mutexWriter));
+				pool.execute(new Writer3(readerNum,writerNum,mutexReader,mutexWriter));
+				break;
 		}
-		
-		System.out.println("顺序操作:");
-		{//顺序操作
-			pool.execute(new Reader2(readerNum,writerNum,mutexReader));
-			pool.execute(new Writer2(readerNum,writerNum,mutexReader));
-			pool.execute(new Reader2(readerNum,writerNum,mutexReader));
-			pool.execute(new Reader2(readerNum,writerNum,mutexReader));
-		}
-		
-		System.out.println("写优先:");
-		{//写优先
-			pool.execute(new Reader3(readerNum,writerNum,mutexReader,mutexWriter));
-			pool.execute(new Reader3(readerNum,writerNum,mutexReader,mutexWriter));
-			pool.execute(new Reader3(readerNum,writerNum,mutexReader,mutexWriter));
-			pool.execute(new Writer3(readerNum,writerNum,mutexReader,mutexWriter));
-		}
-		
 		
 		
 		pool.shutdown();

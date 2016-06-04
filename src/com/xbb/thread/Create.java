@@ -6,15 +6,12 @@ package com.xbb.thread;
  */
 public class Create {
 
-	
 	public static void main(String[] args)
 	{
-				
 		System.out.println(Thread.currentThread().getName()+" is Running");
 		new Thread((new Create()).new  MyRunnable(),"线程1").start();
 		new Thread((new Create()).new  MyThread(),"线程2").start();
 	}
-	
 	
 	public class MyRunnable implements Runnable
 	{
@@ -28,7 +25,6 @@ public class Create {
 			System.out.println(Thread.currentThread().getName()+" is Running");
 		}
 	}
-	
 	
 	public class MyThread extends Thread
 	{
